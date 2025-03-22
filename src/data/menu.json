@@ -1,0 +1,46 @@
+[
+    {
+      "id": 1,
+      "name": "Burger Classic",
+      "price": 8.5,
+      "ingredients": ["pain", "steak", "fromage", "salade", "sauce burger"],
+      "options": [
+        { "label": "Supplément fromage", "price": 1 },
+        { "label": "Supplément bacon", "price": 1.5 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Wrap Poulet",
+      "price": 7,
+      "ingredients": ["tortilla", "poulet grillé", "crudités", "sauce blanche"],
+      "options": [
+        { "label": "Supplément frites", "price": 1.2 }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Tacos Mixte",
+      "price": 9.5,
+      "ingredients": ["galette", "boeuf", "poulet", "frites", "fromage", "sauce algérienne"],
+      "options": [
+        { "label": "Supplément viande", "price": 2 },
+        { "label": "Supplément sauce piquante", "price": 0.5 }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Frites Maison",
+      "price": 3,
+      "ingredients": ["pommes de terre fraîches", "sel", "huile végétale"],
+      "options": []
+    },
+    {
+      "id": 5,
+      "name": "Boisson Canette",
+      "price": 2,
+      "ingredients": ["au choix : Coca, Ice Tea, Oasis, Sprite"],
+      "options": []
+    }
+  ]
+  
