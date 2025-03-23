@@ -68,6 +68,12 @@ function App() {
             <BarChart3 size={18} /> <span>Ajouter un plat</span>
           </button>
           <button
+            onClick={() => setActiveView("menu")}
+            className={`text-left hover:text-yellow-300 flex items-center space-x-2 ${activeView === "menu" ? "text-yellow-300" : ""}`}
+          >
+            <Sandwich size={18} /> <span>Menu</span>
+          </button>
+          <button
             onClick={() => setActiveView("cart")}
             className={`text-left hover:text-yellow-300 flex items-center space-x-2 ${activeView === "cart" ? "text-yellow-300" : ""}`}
           >
