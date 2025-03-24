@@ -3,13 +3,26 @@ import React, { useState, useEffect } from "react";
 function AddEditItem({ onSave, itemToEdit, cancelEdit }) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
   const [ingredients, setIngredients] = useState("");
+  const [options, setOptions] = useState([]);
+  const [newOption, setNewOption] = useState({ label: "", price: "" });
+
+  const categories = [
+    "Burgers",
+    "Tacos",
+    "Wraps",
+    "Accompagnements",
+    "Boissons"
+  ];
 
   useEffect(() => {
     if (itemToEdit) {
       setName(itemToEdit.name);
-      setPrice(itemToEdit.price);
+      setPrice(itemToEdit.price.toString());
+      setCategory(itemToEdit.category);
       setIngredients(itemToEdit.ingredients.join(", "));
+      setOptions(itemToEdit.options || []);
     }
   }, [itemToEdit]);
 
@@ -19,71 +32,139 @@ function AddEditItem({ onSave, itemToEdit, cancelEdit }) {
       id: itemToEdit?.id || Date.now(),
       name,
       price: parseFloat(price),
-      ingredients: ingredients.split(",").map((i) => i.trim())
+      category,
+      ingredients: ingredients.split(",").map(i => i.trim()).filter(i => i),
+      options
     };
     onSave(newItem);
     setName("");
     setPrice("");
+    setCategory("");
     setIngredients("");
+    setOptions([]);
+  };
+
+  const addOption = () => {
+    if (newOption.label && newOption.price) {
+      setOptions([...options, { ...newOption, price: parseFloat(newOption.price) }]);
+      setNewOption({ label: "", price: "" });
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h2 className="text-xl font-bold text-gray-800 mb-2">
-        {itemToEdit ? "Modifier un plat" : "Ajouter un plat"}
-      </h2>
+    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl shadow-lg">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Catégorie
+        </label>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
+          required
+        >
+          <option value="">Sélectionner une catégorie</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+      </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">Nom du plat</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Nom du plat
+        </label>
         <input
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+          type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Burger Classic"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">Prix (€)</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Prix (€)
+        </label>
         <input
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="8.50"
-          required
           type="number"
           step="0.01"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">Ingrédients</label>
-        <input
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-          value={ingredients}
-          onChange={(e) => setIngredients(e.target.value)}
-          placeholder="pain, steak, fromage, salade"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
           required
         />
       </div>
 
-      <div className="flex items-center gap-4 mt-4">
-        <button
-          className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg shadow transition duration-200"
-          type="submit"
-        >
-          {itemToEdit ? "Enregistrer" : "Ajouter"}
-        </button>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Ingrédients (séparés par des virgules)
+        </label>
+        <textarea
+          value={ingredients}
+          onChange={(e) => setIngredients(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
+          rows="3"
+        />
+      </div>
+
+      <div className="space-y-4">
+        <label className="block text-sm font-medium text-gray-700">Options</label>
+        {options.map((option, index) => (
+          <div key={index} className="flex justify-between items-center bg-gray-50 p-2 rounded">
+            <span>{option.label} (+{option.price}€)</span>
+            <button
+              type="button"
+              onClick={() => setOptions(options.filter((_, i) => i !== index))}
+              className="text-red-600 hover:text-red-800"
+            >
+              Supprimer
+            </button>
+          </div>
+        ))}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Nom de l'option"
+            value={newOption.label}
+            onChange={(e) => setNewOption({ ...newOption, label: e.target.value })}
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2"
+          />
+          <input
+            type="number"
+            step="0.01"
+            placeholder="Prix"
+            value={newOption.price}
+            onChange={(e) => setNewOption({ ...newOption, price: e.target.value })}
+            className="w-24 border border-gray-300 rounded-lg px-4 py-2"
+          />
+          <button
+            type="button"
+            onClick={addOption}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div className="flex justify-end space-x-4 pt-4">
         {itemToEdit && (
           <button
-            onClick={cancelEdit}
             type="button"
-            className="text-gray-600 hover:text-gray-900 underline"
+            onClick={cancelEdit}
+            className="px-4 py-2 text-gray-600 hover:text-gray-800"
           >
             Annuler
           </button>
         )}
+        <button
+          type="submit"
+          className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700"
+        >
+          {itemToEdit ? 'Modifier' : 'Ajouter'}
+        </button>
       </div>
     </form>
   );
