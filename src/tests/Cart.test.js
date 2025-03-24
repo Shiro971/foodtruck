@@ -32,7 +32,7 @@ describe("Cart component", () => {
     expect(screen.getByText("Total")).toBeInTheDocument();
     expect(screen.getByText("21.00€")).toBeInTheDocument();
   });
-  
+   
 
   it("affiche un message si le panier est vide", () => {
     render(<Cart cart={[]} onRemove={() => {}} />);
