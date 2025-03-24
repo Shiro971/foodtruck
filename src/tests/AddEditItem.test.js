@@ -21,7 +21,7 @@ describe("AddEditItem component", () => {
 
     // Soumission du formulaire
     fireEvent.click(screen.getByText("Ajouter"));
-
+ 
     // Vérifications
     expect(mockOnSave).toHaveBeenCalledWith({
       id: expect.any(Number),

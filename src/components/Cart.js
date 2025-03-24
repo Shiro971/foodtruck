@@ -51,7 +51,7 @@ function Cart({ cart, orders, onRemove, onUpdateQuantity, onOrderSuccess, onStat
     onOrderSuccess(orderData);
     setShowPayment(false);
   };
-
+ 
   // Extract item rendering logic
   // Dans la fonction `renderCartItem`
   const renderCartItem = (item) => (
