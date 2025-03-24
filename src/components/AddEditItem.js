@@ -54,14 +54,16 @@ function AddEditItem({ onSave, itemToEdit, cancelEdit }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl shadow-lg">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="category">
           Catégorie
         </label>
         <select
+          id="category"  // Ajout de l'ID
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-4 py-2"
           required
+          placeholder="Category"
         >
           <option value="">Sélectionner une catégorie</option>
           {categories.map((cat) => (
@@ -71,41 +73,47 @@ function AddEditItem({ onSave, itemToEdit, cancelEdit }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="platename">
           Nom du plat
         </label>
         <input
+        id="platename"  // Ajout de l'ID
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-4 py-2"
           required
+          placeholder="PlateName"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="price">
           Prix (€)
         </label>
         <input
+        id="price"  // Ajout de l'ID
           type="number"
           step="0.01"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-4 py-2"
           required
+          placeholder="Price"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="ingredients">
           Ingrédients (séparés par des virgules)
         </label>
         <textarea
+        id="ingredients"  // Ajout de l'ID
           value={ingredients}
           onChange={(e) => setIngredients(e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-4 py-2"
           rows="3"
+          placeholder="Ingredients"
         />
       </div>
 

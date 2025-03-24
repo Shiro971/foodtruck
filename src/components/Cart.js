@@ -46,74 +46,81 @@ function Cart({ cart, orders, onRemove, onUpdateQuantity, onOrderSuccess, onStat
       total: total,
       date: new Date(),
       status: 'PENDING',
-      number: `CMD${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${Math.floor(Math.random()*1000)}`
+      number: `CMD${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${Math.floor(Math.random() * 1000)}`
     };
     onOrderSuccess(orderData);
     setShowPayment(false);
   };
 
   // Extract item rendering logic
+  // Dans la fonction `renderCartItem`
   const renderCartItem = (item) => (
-    <div key={item.customId || item.id} 
-      className="bg-white p-4 rounded-lg shadow-sm flex justify-between items-center">
-      <div>
-        <span className="font-medium">{item.quantity}x {item.name}</span>
-        {item.promotionApplied && (
-          <span className="ml-2 text-sm text-green-600">
-            ({item.promotionApplied})
-          </span>
-        )}
-      </div>
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => onUpdateQuantity(item.customId || item.id, item.quantity - 1)}
-            className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
-          >
-            -
-          </button>
-          <span className="w-8 text-center">{item.quantity}</span>
-          <button
-            onClick={() => onUpdateQuantity(item.customId || item.id, item.quantity + 1)}
-            className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
-          >
-            +
-          </button>
-        </div>
-        <div className="flex items-center space-x-2">
-          {item.isPromotional ? (
-            <>
-              <span className="line-through text-gray-400">
-                {(item.originalPrice * item.quantity).toFixed(2)}€
-              </span>
-              <span className="text-green-600 font-medium">0.00€</span>
-            </>
-          ) : (
-            <span>{((item.finalPrice || item.price) * item.quantity).toFixed(2)}€</span>
+      <div key={item.customId || item.id} className="bg-white p-4 rounded-lg shadow-sm flex justify-between items-center">
+        <div>
+          <span className="font-medium">{item.quantity}x {item.name}</span>
+          {item.promotionApplied && (
+            <span className="ml-2 text-sm text-green-600">
+              ({item.promotionApplied})
+            </span>
           )}
         </div>
-        <button
-          onClick={() => onRemove(item.customId || item.id)}
-          className="text-red-600 hover:text-red-800"
-        >
-          Retirer
-        </button>
+        <div className="flex flex-col">
+          {item.options && item.options.length > 0 && item.options.map((option, i) => (
+            <span key={i} className="font-medium">
+              + {option.label} ({option.price}€)
+            </span>
+          ))}
+        </div>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => onUpdateQuantity(item.customId || item.id, item.quantity - 1)}
+              className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
+            >
+              -
+            </button>
+            <span className="w-8 text-center">{item.quantity}</span>
+            <button
+              onClick={() => onUpdateQuantity(item.customId || item.id, item.quantity + 1)}
+              className="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
+            >
+              +
+            </button>
+          </div>
+          <div className="flex items-center space-x-2">
+            {item.isPromotional ? (
+              <>
+                <span className="line-through text-gray-400">
+                  {(item.originalPrice * item.quantity).toFixed(2)}€
+                </span>
+                <span className="text-green-600 font-medium">0.00€</span>
+              </>
+            ) : (
+              <span>{((item.finalPrice || item.price) * item.quantity).toFixed(2)}€</span>
+            )}
+          </div>
+          <button
+            onClick={() => onRemove(item.customId || item.id)}
+            className="text-red-600 hover:text-red-800"
+          >
+            Retirer
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+
 
   if (cart.length === 0 && lastOrder) {
     return (
       <div className="space-y-6">
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-semibold mb-4">Dernière commande #{lastOrder.number}</h3>
-          
+
           <div className="mb-4">
-            <span className={`inline-block px-3 py-1 rounded-full text-sm ${
-              lastOrder.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-              lastOrder.status === 'READY' ? 'bg-green-100 text-green-800' :
-              'bg-yellow-100 text-yellow-800'
-            }`}>
+            <span className={`inline-block px-3 py-1 rounded-full text-sm ${lastOrder.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
+                lastOrder.status === 'READY' ? 'bg-green-100 text-green-800' :
+                  'bg-yellow-100 text-yellow-800'
+              }`}>
               {getStatusLabel(lastOrder.status)}
             </span>
           </div>
