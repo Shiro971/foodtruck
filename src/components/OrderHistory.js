@@ -51,23 +51,24 @@ function OrderHistory({ orders, onReorder, onStatusChange, onCancel }) {
 
             <div className="space-y-2">
               {order.items.map((item, index) => (
-                <div key={index} className="flex justify-between text-gray-700">
-                  <span>{item.quantity}x {item.name}</span>
-                  <span>{((item.finalPrice || item.price) * item.quantity).toFixed(2)}€</span>
+                <div key={index}>
+                  <div className="flex justify-between text-gray-700">
+                    <span>{item.quantity}x {item.name}</span>
+                    <span>{((item.finalPrice || item.price) * item.quantity).toFixed(2)}€</span>
+                  </div>
+                  {item.selectedOptions && item.selectedOptions.length > 0 && (
+                    <div className="text-sm text-gray-500 ml-4">
+                      {item.selectedOptions.map((opt, optIndex) => (
+                        <div key={`${index}-${optIndex}`}>
+                          {opt.label} (+{opt.price.toFixed(2)}€)
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
-              {order.items.some(item => item.selectedOptions?.length > 0) && (
-                <div className="text-sm text-gray-500 ml-4">
-                  {order.items.map((item, index) => (
-                    item.selectedOptions?.map((opt, optIndex) => (
-                      <div key={`${index}-${optIndex}`}>
-                        • {opt.label} (+{opt.price.toFixed(2)}€)
-                      </div>
-                    ))
-                  ))}
-                </div>
-              )}
             </div>
+
 
             <div className="mt-4 pt-4 border-t border-gray-200">
               <div className="flex justify-between font-semibold">
